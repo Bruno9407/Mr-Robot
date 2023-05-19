@@ -6,7 +6,7 @@ Tempos até o fim do semestre para entregar mas vamos fazer logo pra poder facil
 
 Já que vamos trabalhar com várias pessoas editando o mesmo os mesmos arquivos, foi criado esse projeto no github para que possamos dividir o trabalho sem atrapalhar o coleguinha e depois tentar matar um ao outro.
 
-<h2>Para enviar suas partes</h2>
+<h2 style="font-size:2rem;>Para enviar suas partes</h2>
 
 <ol>
   <li>Git no console (mais dificil)</li>
