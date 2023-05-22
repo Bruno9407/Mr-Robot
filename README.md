@@ -2,7 +2,7 @@
 
 Trabalho de LTP2, criação de sistema para loja de computadores.
 
-Tempos até o fim do semestre para entregar mas vamos fazer logo pra poder facilitar.
+Temos até o fim do semestre para entregar mas vamos fazer logo pra poder facilitar.
 
 Já que vamos trabalhar com várias pessoas editando o mesmo os mesmos arquivos, foi criado esse projeto no github para que possamos dividir o trabalho sem atrapalhar o coleguinha e depois tentar matar um ao outro.
 
@@ -14,7 +14,7 @@ Já que vamos trabalhar com várias pessoas editando o mesmo os mesmos arquivos,
   <li>Abrir o arquivo .java no navegador, alterar o .com por .dev na url, e copiar e colar seus arquivos</li>
 </ol>
 
-<strong style="font-size:1rem;">OBS: Essa é uma boa oportunidade para aprenderem a usar Git e GitHub, pois é algo que vão usar em toda carreira como dev, e isso não será ensinado na faculdade.</strong>
+<strong style="font-size:.6rem;">OBS: Essa é uma boa oportunidade para aprenderem a usar Git e GitHub, pois é algo que vão usar em toda carreira como dev, e isso não será ensinado na faculdade.</strong>
 
 <h2 style="font-size:2rem;">Como enviar suas partes</h2>
 
