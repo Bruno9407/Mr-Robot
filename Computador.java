@@ -137,13 +137,13 @@ public class Computador {
 
 	//************************  ALTERACAO  *****************************
 	public void alterar() {
-		String matriculaChave;
 		char confirmacao;
 		long posicaoRegistro = 0;
 		byte opcao;
+		int maiorCod;
+		String marcaAux;
 
 		do {
-			do {
 				Main.leia.nextLine();
 				System.out.println("\n ***************  ALTERACAO DE ALUNOS  ***************** ");
 				System.out.print("Digite a Matricula do Aluno que deseja alterar( FIM para encerrar ): ");
@@ -152,16 +152,45 @@ public class Computador {
 					break;
 				}
 
-				posicaoRegistro = pesquisarAluno(matriculaChave);
-				if (posicaoRegistro == -1) {
-					System.out.println("Matricula nao cadastrada no arquivo, digite outro valor\n");
-				}
-			}while (posicaoRegistro == -1);
-
 			if (matriculaChave.equals("FIM")) {
 				break;
 			}
 
+			try { 
+				RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
+				while (true) {
+					ativo		  = arqComp.readChar();
+					marca  		  = arqComp.readUTF();
+					codComp		  = arqComp.readUTF();
+					modelo        = arqComp.readUTF();
+					processador   = arqComp.readUTF();
+					quantMemoria  = arqComp.readInt();
+					tamanhoTela   = arqComp.readInt();
+					quantEstoque  = arqComp.readInt();
+					preco		  = arqComp.readFloat();
+					quantVendida  = arqComp.readInt();
+					dtUltimaVenda = arqComp.readUTF();
+					
+					if ( marca.equals(marcaAux) && 
+							Integer.parseInt(codComp.substring(2)) > maiorCod && ativo == 'S') {
+						arqComp.close();
+					}
+				}
+			}catch (EOFException e) {
+				maiorCod = maiorCod + 1;
+				codComp = String.valueOf(maiorCod);
+				while(codComp.length() < 4 ){
+					codComp = '0' + codComp;
+				}
+				
+				marcaAux = marca.substring(0, 2);
+				codComp = marcaAux + codComp;
+				
+			}catch (IOException e) { 
+				System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
+				System.exit(0);
+			}
+			
 			ativo = 'S';
 
 			do {
