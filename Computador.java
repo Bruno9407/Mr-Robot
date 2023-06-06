@@ -13,7 +13,7 @@ public class Computador {
 	float preco;
 	int quantVendida;
 	String dtUltimaVenda; // <-- Data da �ltima Venda
-	Scaner leia = new Scanner(System.in);
+	Scanner leia = new Scanner(System.in);
 
 	public long pesquisarComputador (String codCompPesq) {	
 		// metodo para localizar um registro no arquivo em disco
