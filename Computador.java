@@ -12,7 +12,8 @@ public class Computador {
 	int quantEstoque;
 	float preco;
 	int quantVendida;
-	String dtUltimaVenda; // <-- Data da última Venda
+	String dtUltimaVenda; // <-- Data da ï¿½ltima Venda
+	Scaner leia = new Scanner(System.in);
 
 	public long pesquisarComputador (String codCompPesq) {	
 		// metodo para localizar um registro no arquivo em disco
@@ -94,21 +95,21 @@ public class Computador {
 
 		do {
 			do {
-				Main.leia.nextLine();
+				leia.nextLine();
 				System.out.println("\n ***************  INCLUSAO DE ALUNOS  ***************** ");
-				System.out.print("Digite a Matricula do Aluno( FIM para encerrar): ");
-				matriculaChave = Main.leia.nextLine();
-				if (matriculaChave.equals("FIM")) {
+				System.out.print("Digite a chave do Computador( FIM para encerrar): ");
+				CompChave = leia.nextLine();
+				if (CompChave.equals("FIM")) {
 					break;
 				}
-				posicaoRegistro = pesquisarAluno(matriculaChave);
+				posicaoRegistro = pesquisarComputador(CompChave);
 
 				if (posicaoRegistro >= 0) {
 					System.out.println("Matricula ja cadastrada, digite outro valor\n");
 				}
 			}while (posicaoRegistro >= 0);
 
-			if (matriculaChave.equals("FIM")) {
+			if (CompChave.equals("FIM")) {
 				break;
 			}
 
