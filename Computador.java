@@ -89,7 +89,7 @@ public class Computador {
 
 	// ***********************   INCLUSAO   *****************************
 	public void incluir() {
-		String matriculaChave;
+		String CompChave;
 		char confirmacao;
 		long posicaoRegistro;
 
