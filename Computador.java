@@ -3,6 +3,10 @@ import java.util.*;
 
 public class Computador {
 
+	String marcasComp[] = {"Dell", "Lenovo", "HP", "Positivo", "Asus", "Apple", "IBM"}; 
+	String processadoresComp[] = {"Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "AMD Ryzen" , "AMD Athlon"};
+	int tamanhoTelas[] = {10, 12, 15, 20, 25, 28};
+	
 	char 	ativo;
 	String	marca;
 	String 	codComp;
@@ -50,7 +54,37 @@ public class Computador {
 			return -1;
 		}
 	}
+	
+	public boolean checarMarca() {
+		
+		for(int x = 0; x < marcasComp.length; x++) {
+			if(marca.equals(marcasComp[x])) {
+				return true;
+			}
+		}
+		return false;
+	}
 
+	public boolean checarProcessadores() {
+		
+		for(int x = 0; x < processadoresComp.length; x++) {
+			if(processador.equals(processadoresComp[x])) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean checarTelas() {
+		
+		for(int x = 0; x < tamanhoTelas.length; x++) {
+			if(processador.equals(tamanhoTelas[x])) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void salvarComputador() {	
 		// metodo para incluir um novo registro no final do arquivo em disco
 		try {
@@ -126,7 +160,7 @@ public class Computador {
 				}
 			}
 			
-			arqComp.close();
+			
 			
 		} catch (IOException e) { 
 			System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
