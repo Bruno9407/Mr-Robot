@@ -232,12 +232,12 @@ public class Computador {
 
 				switch (opcao) {
 				case 1:
-					Main.leia.nextLine();
+					leia.nextLine();
 					System.out.print  ("Digite o NOVO NOME do Aluno..................: ");
-					nomeAluno = Main.leia.nextLine();
+					nomeAluno = leia.nextLine();
 					break;
 				case 2: 
-					Main.leia.nextLine();
+					leia.nextLine();
 					System.out.print  ("Digite a NOVA DATA de Nascimento (DD/MM/AAAA): ");
 					dtNasc = Main.leia.nextLine();
 					break;
