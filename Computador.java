@@ -166,15 +166,9 @@ public class Computador {
 			System.out.print("Digite o preco do computador: ");
 			preco = leia.nextFloat();
 			
-			System.out.print("Digite a quantidade vendida: ");
-			quantVendida = leia.nextInt();
-			
-			System.out.print("Digite a data da ultima venda(DD/MM/AAAA)");
-			dtUltimaVenda = leia.nextLine();
-
 			do {
 				System.out.print("\nConfirma a gravacao dos dados (S/N) ? ");
-				confirmacao = Main.leia.next().charAt(0);
+				confirmacao = leia.next().charAt(0);
 				if (confirmacao == 'S') {
 					salvarComputador();
 				}
@@ -185,11 +179,11 @@ public class Computador {
 
 		}while (continua.equalsIgnoreCase("s"));	    
 	}
-
+	
 
 	//************************  ALTERACAO  *****************************
 	public void alterar() {
-		String matriculaChave;
+		String codComp;
 		char confirmacao;
 		long posicaoRegistro = 0;
 		byte opcao;
@@ -198,29 +192,38 @@ public class Computador {
 			do {
 				Main.leia.nextLine();
 				System.out.println("\n ***************  ALTERACAO DE ALUNOS  ***************** ");
-				System.out.print("Digite a Matricula do Aluno que deseja alterar( FIM para encerrar ): ");
-				matriculaChave = Main.leia.nextLine();
-				if (matriculaChave.equals("FIM")) {
+				System.out.print("Digite o computador que deseja alterar( FIM para encerrar ): ");
+				codComp = leia.nextLine();
+				if (codComp.equals("FIM")) {
 					break;
 				}
 
-				posicaoRegistro = pesquisarAluno(matriculaChave);
+				posicaoRegistro = pesquisarComputador(codComp);
 				if (posicaoRegistro == -1) {
 					System.out.println("Matricula nao cadastrada no arquivo, digite outro valor\n");
 				}
 			}while (posicaoRegistro == -1);
 
-			if (matriculaChave.equals("FIM")) {
+			if (codComp.equals("FIM")) {
 				break;
 			}
 
 			ativo = 'S';
+//			na tela de alteração, os seus valores deverão ser exibidos, mas não poderão ser alterados.
+//			marca - consistir por meio do método consistirMarca;
+//			modelo - digitação obrigatória ;
+//			processador - consistir por meio da função consistirProcessador;
+//			quantMemoria - aceitar somente valores entre 1 e 16 (valores em GB);
+//			tamanhoTela - consistir por meio da função consistirTamanhoTela;
 
 			do {
-				System.out.println("[ 1 ] Nome do Aluno............: " + nomeAluno);
-				System.out.println("[ 2 ] Data de nascimento ......: " + dtNasc);
-				System.out.println("[ 3 ] Valor da mensalidade.....: " + mensalidade);
-				System.out.println("[ 4 ] sexo do Aluno............: " + sexo);
+				System.out.println("[ 1 ] Marca do computador............: " + marca);
+				System.out.println("[ 2 ] Modelo do computador ......: " + modelo);
+				System.out.println("[ 3 ] Processador.....: " + processador);
+				System.out.println("[ 4 ] Quantidade de memoria RAM ............: " + quantMemoria);
+				System.out.println("[ 5 ] Tamanho da tela.....: " + tamanhoTela);
+				System.out.println("[ 6 ] Quantidade de estoque.....: " + tamanhoTela);
+				System.out.println("[ 7 ] preco.....: " + preco);
 
 				do{
 					System.out.println("Digite o numero do campo que deseja alterar (0 para finalizar as alteraÃ§Ãµes): ");
