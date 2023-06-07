@@ -262,26 +262,46 @@ public class Computador {
 				do{
 					System.out.println("Digite o numero do campo que deseja alterar (0 para finalizar as alteraÃ§Ãµes): ");
 					opcao = Main.leia.nextByte();
-				}while (opcao < 0 || opcao > 4);
+				}while (opcao < 0 || opcao > 7);
 
 				switch (opcao) {
 				case 1:
 					leia.nextLine();
-					System.out.print  ("Digite o NOVO NOME do Aluno..................: ");
-					nomeAluno = leia.nextLine();
+					do {
+						
+						System.out.println("Digite a marcar que deseja alterar..................: ");
+						marca = leia.nextLine();
+						
+						if(! checarMarca()) {
+							System.out.println("Marca inexistente");
+						}
+					}while(!checarMarca());
+					
+					try {
+						RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
+						
+					}catch(IOException e) {
+						System.out.println("Erro na abertura do arquivo");
+					}
+					
 					break;
 				case 2: 
 					leia.nextLine();
-					System.out.print  ("Digite a NOVA DATA de Nascimento (DD/MM/AAAA): ");
-					dtNasc = Main.leia.nextLine();
+					System.out.println("Digite o modelo de computador: ");
+					modelo = leia.nextLine();
 					break;
 				case 3:
-					System.out.print  ("Digite o NOVO VALOR da mensalidade...........: ");
-					mensalidade = Main.leia.nextFloat();
+					do {
+						System.out.println("Digite o novo processador...........: ");
+						processador = leia.nextLine();
+						if(!checarProcessadores()) {
+							System.out.println("Processador invalido");
+						}
+					}while(!checarProcessadores());
 					break;
 				case 4: 
-					System.out.print  ("Digite o NOVO sexo do Aluno (M/F)............: ");
-					sexo = Main.leia.next().charAt(0);
+					System.out.println("Digite a quantidade de memoria RAM")............: ");
+					quantMemoria = leia.nextInt();
 					break;
 				}
 				System.out.println();
