@@ -55,16 +55,6 @@ public class Computador {
 		}
 	}
 	
-	public boolean checarMarca() {
-		
-		for(int x = 0; x < marcasComp.length; x++) {
-			if(marca.equals(marcasComp[x])) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public boolean checarProcessadores() {
 		
 		for(int x = 0; x < processadoresComp.length; x++) {
@@ -128,6 +118,11 @@ public class Computador {
 	public void Incluir() {
 		
 		int estoqueAtual;
+		char confirmacao;
+		byte opcao;
+		int maiorCod;
+		String marcaAux;
+
 		
 		
 		System.out.println("Digite a marca que deseja incluir estoque: ");
@@ -158,9 +153,22 @@ public class Computador {
 					estoqueAtual = quantEstoque;
 					
 				}
+				
+				if ( marca.equals(marcaAux) && 
+					Integer.parseInt(codComp.substring(2)) > maiorCod && ativo == 'S') {
+					arqComp.close();
+				}
 			}
 			
+		}catch (EOFException e) {
+			maiorCod = maiorCod + 1;
+			codComp = String.valueOf(maiorCod);
+			while(codComp.length() < 4 ){
+				codComp = '0' + codComp;
+			}
 			
+			marcaAux = marca.substring(0, 2);
+			codComp = marcaAux + codComp;
 			
 		} catch (IOException e) { 
 			System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
@@ -243,54 +251,29 @@ public class Computador {
 			}
 
 			ativo = 'S';
-//			na tela de alteração, os seus valores deverão ser exibidos, mas não poderão ser alterados.
-//			marca - consistir por meio do método consistirMarca;
-//			modelo - digitação obrigatória ;
-//			processador - consistir por meio da função consistirProcessador;
-//			quantMemoria - aceitar somente valores entre 1 e 16 (valores em GB);
-//			tamanhoTela - consistir por meio da função consistirTamanhoTela;
 
 			do {
-				System.out.println("[ 1 ] Marca do computador............: " + marca);
-				System.out.println("[ 2 ] Modelo do computador ......: " + modelo);
-				System.out.println("[ 3 ] Processador.....: " + processador);
-				System.out.println("[ 4 ] Quantidade de memoria RAM ............: " + quantMemoria);
-				System.out.println("[ 5 ] Tamanho da tela.....: " + tamanhoTela);
-				System.out.println("[ 6 ] Quantidade de estoque.....: " + tamanhoTela);
-				System.out.println("[ 7 ] preco.....: " + preco);
+				System.out.println("[ 1 ] Modelo do computador ......: " + modelo);
+				System.out.println("[ 2 ] Processador.....: " + processador);
+				System.out.println("[ 3 ] Quantidade de memoria RAM ............: " + quantMemoria);
+				System.out.println("[ 4 ] Tamanho da tela.....: " + tamanhoTela);
+				System.out.println("[ 5 ] Quantidade de estoque.....: " + tamanhoTela);
+				System.out.println("[ 6 ] preco.....: " + preco);
 
 				do{
 					System.out.println("Digite o numero do campo que deseja alterar (0 para finalizar as alteraÃ§Ãµes): ");
-					opcao = Main.leia.nextByte();
-				}while (opcao < 0 || opcao > 7);
+					opcao = leia.nextByte();
+				}while (opcao < 0 || opcao > 6);
 
 				switch (opcao) {
 				case 1:
 					leia.nextLine();
-					do {
-						
-						System.out.println("Digite a marcar que deseja alterar..................: ");
-						marca = leia.nextLine();
-						
-						if(! checarMarca()) {
-							System.out.println("Marca inexistente");
-						}
-					}while(!checarMarca());
-					
-					try {
-						RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
-						
-					}catch(IOException e) {
-						System.out.println("Erro na abertura do arquivo");
-					}
-					
-					break;
-				case 2: 
-					leia.nextLine();
 					System.out.println("Digite o modelo de computador: ");
 					modelo = leia.nextLine();
-					break;
-				case 3:
+					
+					break;					
+
+				case 2: 
 					do {
 						System.out.println("Digite o novo processador...........: ");
 						processador = leia.nextLine();
@@ -299,10 +282,33 @@ public class Computador {
 						}
 					}while(!checarProcessadores());
 					break;
-				case 4: 
-					System.out.println("Digite a quantidade de memoria RAM")............: ");
+					
+				case 3:
+					System.out.println("Digite a quantidade de memoria RAM");
 					quantMemoria = leia.nextInt();
 					break;
+					
+				case 4:
+					do {
+						System.out.println("Digite o tamanho da tela: ");
+						tamanhoTela = leia.nextInt();
+						if(! checarTelas()) {
+							System.out.println("Telas invalidas");
+						}
+					}while(! checarTelas());
+
+				break;
+				
+				case 5:
+					System.out.println("Digite a quantidade de estoque: ");
+					quantEstoque = leia.nextInt();
+				break;
+				
+				case 6:
+					System.out.println("Digite o preco: ");
+					preco = leia.nextFloat();
+				break;
+
 				}
 				System.out.println();
 			}while (opcao != 0);  		
@@ -323,46 +329,42 @@ public class Computador {
 
 	//************************  EXCLUSAO  *****************************
 	public void excluir() {
-		String matriculaChave;
+		String compChave;
 		char confirmacao;
 		long posicaoRegistro = 0;
 
 		do {
 			do {
 				Main.leia.nextLine();
-				System.out.println(" ***************  EXCLUSAO DE ALUNOS  ***************** ");
-				System.out.print("Digite a Matricula do Aluno que deseja excluir ( FIM para encerrar ): ");
-				matriculaChave = Main.leia.nextLine();
-				if (matriculaChave.equals("FIM")) {
+				System.out.println(" ***************  EXCLUSAO DE Compudatores  ***************** ");
+				System.out.print("Digite o codigo do computador que deseja excluir ( FIM para encerrar ): ");
+				compChave = leia.nextLine();
+				
+				if (compChave.equals("FIM")) {
 					break;
 				}
 
-				posicaoRegistro = pesquisarAluno(matriculaChave);
+				posicaoRegistro = pesquisarComputador(compChave);
+				
 				if (posicaoRegistro == -1) {
 					System.out.println("Matricula nao cadastrada no arquivo, digite outro valor\n");
 				}
 			}while (posicaoRegistro == -1);
 
-			if (matriculaChave.equals("FIM")) {
+			if (compChave.equals("FIM")) {
 				System.out.println("\n ************  PROGRAMA ENCERRADO  ************** \n");
 				break;
 			}
-
-			System.out.println("Nome do aluno.......: " + nomeAluno);
-			System.out.println("Data de nascimento..: " + dtNasc);
-			System.out.println("Valor da mensalidade: " + mensalidade);
-			System.out.println("Sexo do aluno.......: " + sexo);
-			System.out.println();
-
+			
 			do {
-				System.out.print("\nConfirma a exclusao deste aluno (S/N) ? ");
-				confirmacao = Main.leia.next().charAt(0);
+				System.out.print("\nConfirma a exclusao deste computador (S/N) ? ");
+				confirmacao = leia.next().charAt(0);
 				if (confirmacao == 'S') {
-					desativarAluno(posicaoRegistro);
+					desativarComputador(posicaoRegistro);
 				}
 			}while (confirmacao != 'S' && confirmacao != 'N');
 
-		}while ( ! matricula.equals("FIM"));
+		}while ( ! compChave.equals("FIM"));
 	}
 
 	//************************  CONSULTA  *****************************
@@ -375,24 +377,27 @@ public class Computador {
 
 		do {
 			do {
-				System.out.println(" ***************  CONSULTA DE ALUNOS  ***************** ");
-				System.out.println(" [1] CONSULTAR APENAS 1 ALUNO ");
-				System.out.println(" [2] LISTA DE TODOS OS ALUNOS ");
-				System.out.println(" [3] LISTA SOMENTE SEXO MASCULINO OU FEMININO ");
+				System.out.println(" ***************  CONSULTA DE COMPUTADORES  ***************** ");
+				System.out.println(" [1] LISTAR TODOS OS COMPUTADORES ");
+				System.out.println(" [2] LISTAR APENAS UM COMPUTADIR ATRAVÉS DO CODCAMP INFORMADO ");
+				System.out.println(" [3] LISTAR SOMENTE COMPUTADORES JÁ VENDIDOS ");
+				System.out.println(" [4] LISTAR COMPUTADORES CUJA ÚLTIMA VENDA OCORREU EM DETERMINADO MÊS/ANO ");
+				System.out.println(" [5] LISTAR COMPUTADORES POR FAIXA DE PREÇO ");
 				System.out.println(" [0] SAIR");
+				
 				System.out.print("\nDigite a opcao desejada: ");
 				opcao = Main.leia.nextByte();
-				if (opcao < 0 || opcao > 3) {
+				if (opcao < 0 || opcao > 5) {
 					System.out.println("opcao Invalida, digite novamente.\n");
 				}
-			}while (opcao < 0 || opcao > 3);
+			}while (opcao < 0 || opcao > 5);
 
 			switch (opcao) {
 			case 0:
 				System.out.println("\n ************  PROGRAMA ENCERRADO  ************** \n");
 				break;
 
-			case 1:  // consulta de uma unica matricula
+			case 1:  // LISTAR TODOS OS COMPUTADORES
 				Main.leia.nextLine();  // limpa buffer de memoria
 				System.out.print("Digite a Matriocula do Aluno: ");
 				matriculaChave = Main.leia.nextLine();
@@ -402,7 +407,7 @@ public class Computador {
 					System.out.println("Matricula nao cadastrada no arquivo \n");
 				} else {
 					imprimirCabecalho();
-					imprimirAluno();
+					imprimirRelatorio();
 					System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
 					Main.leia.nextLine();
 				}
@@ -421,7 +426,7 @@ public class Computador {
 						mensalidade = arqComp.readFloat();
 						sexo        = arqComp.readChar();
 						if ( ativo == 'S') {
-							imprimirAluno();
+							imprimirRelatorio();
 						}
 					}
 					//    arqComp.close();
@@ -456,7 +461,7 @@ public class Computador {
 						sexo        = arqComp.readChar();
 
 						if ( sexoAux == sexo && ativo == 'S') {
-							imprimirAluno();
+							imprimirRelatorio();
 						}
 					}
 				} catch (EOFException e) {
@@ -474,15 +479,25 @@ public class Computador {
 	}
 
 	public void imprimirCabecalho () {
-		System.out.println("-MATRICULA-  -------- NOME ALUNO ----------  --DATA NASC--  -Mensalidade-  -sexo- ");
+		System.out.println("-CODCOMP-  -------- MARCA ----------  --MODELO--  -PROCESSADOR-  -ESTOQUE-  -PREÇO-   -QUANT.VEND-   -DT ULT VENDA-   -VLR TOTAL-");
 	}
 
-	public void imprimirAluno () {
+	public void imprimirRelatorio () {
 		System.out.println(	formatarString(matricula, 11 ) + "  " +
-				formatarString(nomeAluno , 30) + "  " + 
-				formatarString(dtNasc , 13) + "  " + 
-				formatarString( String.valueOf(mensalidade) , 13 ) + "  " +
-				formatarString( Character.toString(sexo) , 6 )   ); 
+				formatarString( codComp , 30 ) + "  " + 
+				formatarString( marca , 30 ) + "  " + 
+				formatarString( modelo , 30 ) + "  " + 
+				formatarString( processador , 30 ) + "  " + 
+				formatarString( String.valueOf(quantEstoque) , 10 ) + "  " + 
+				formatarString( String.valueOf(preco) , 10 ) + "  " + 
+				formatarString( String.valueOf(quantVendida) , 10 ) + "  " +
+				formatarString( String.valueOf (dtUltimaVenda) , 10 ) + "  " + 
+				formatarString( String.valueOf(preco * quantVendida) , 10 ) + "  " + 
+				formatarString( Character.toString(ativo) , 6 )   ); 
+	}
+	
+	public void imprimirSomatorio() {
+		
 	}
 
 	public static String formatarString (String texto, int tamanho) {	
