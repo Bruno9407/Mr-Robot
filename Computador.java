@@ -335,7 +335,7 @@ public class Computador {
         do {
             do {
                 Main.leia.nextLine();
-                System.out.println(" ***************  EXCLUSAO DE Compudatores  ***************** ");
+                System.out.println(" ***************  EXCLUSAO DE COMPUTADORES  ***************** ");
                 System.out.print("Digite o codigo do computador que deseja excluir ( FIM para encerrar ): ");
                 compChave = leia.nextLine();
 
@@ -370,7 +370,7 @@ public class Computador {
     public void consultar() 	{
         RandomAccessFile arqComp;
         byte opcao;
-        String matriculaChave;
+        String compChave;
         char sexoAux;
         long posicaoRegistro;
 
@@ -378,7 +378,7 @@ public class Computador {
             do {
                 System.out.println(" ***************  CONSULTA DE COMPUTADORES  ***************** ");
                 System.out.println(" [1] LISTAR TODOS OS COMPUTADORES ");
-                System.out.println(" [2] LISTAR APENAS UM COMPUTADIR ATRAVÉS DO CODCAMP INFORMADO ");
+                System.out.println(" [2] LISTAR APENAS UM COMPUTADOR ATRAVÉS DO CODCAMP INFORMADO ");
                 System.out.println(" [3] LISTAR SOMENTE COMPUTADORES JÁ VENDIDOS ");
                 System.out.println(" [4] LISTAR COMPUTADORES CUJA ÚLTIMA VENDA OCORREU EM DETERMINADO MÊS/ANO ");
                 System.out.println(" [5] LISTAR COMPUTADORES POR FAIXA DE PREÇO ");
@@ -399,9 +399,9 @@ public class Computador {
                 case 1:  // LISTAR TODOS OS COMPUTADORES
                     Main.leia.nextLine();  // limpa buffer de memoria
                     System.out.print("Digite a Matriocula do Aluno: ");
-                    matriculaChave = Main.leia.nextLine();
+                    compChave = Main.leia.nextLine();
 
-                    posicaoRegistro = pesquisarComputador(matriculaChave);
+                    posicaoRegistro = pesquisarComputador(compChave);
                     if (posicaoRegistro == -1) {
                         System.out.println("Matricula nao cadastrada no arquivo \n");
                     } else {
@@ -413,7 +413,7 @@ public class Computador {
 
                     break;
 
-                case 2:  // imprime todos os alunos
+                case 2:  // imprime todos os computadores atraves do registro
                     try {
                         arqComp = new RandomAccessFile("COMP.DAT" , "rw");
                         imprimirCabecalho();
@@ -432,7 +432,7 @@ public class Computador {
                     } catch (EOFException e) {
                         System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
                         Main.leia.nextLine();
-                        matriculaChave = Main.leia.nextLine();
+                        compChave = Main.leia.nextLine();
                     } catch (IOException e) {
                         System.out.println("Erro na abertura do arquivo - programa sera finalizado");
                         System.exit(0);
@@ -466,7 +466,7 @@ public class Computador {
                     } catch (EOFException e) {
                         System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
                         Main.leia.nextLine();
-                        matriculaChave = Main.leia.nextLine();
+                        compChave = Main.leia.nextLine();
                     } catch (IOException e) {
                         System.out.println("Erro na abertura do arquivo - programa sera finalizado");
                         System.exit(0);
@@ -482,7 +482,7 @@ public class Computador {
     }
 
     public void imprimirRelatorio () {
-        System.out.println(	formatarString(matricula, 11 ) + "  " +
+        System.out.println(
                 formatarString( codComp , 30 ) + "  " +
                 formatarString( marca , 30 ) + "  " +
                 formatarString( modelo , 30 ) + "  " +
