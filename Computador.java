@@ -123,13 +123,10 @@ public class Computador {
         int maiorCod = 0;
         String marcaAux = "";
 
+       do{ 
 
-
-        System.out.println("Digite a marca que deseja incluir estoque: ");
-        String novaMarca = leia.nextLine();
-
-        System.out.print("Digite a quantidade a incluir: ");
-        int novoEstoque = leia.nextInt();
+        System.out.println("Digite a marca que deseja incluir estoque(FIM PARA ENCERRAR A INCLUSÃO): ");
+        marcaAux = leia.nextLine();
 
 
         try {
@@ -149,13 +146,8 @@ public class Computador {
                 quantVendida = arqComp.readInt();
                 dtUltimaVenda = arqComp.readUTF();
 
-                if(marca.equals(novaMarca) && ativo == 's') {
-                    estoqueAtual = quantEstoque;
-
-                }
-
                 if ( marca.equals(marcaAux) && Integer.parseInt(codComp.substring(2)) > maiorCod && ativo == 'S') {
-                    arqComp.close();
+                    maiorCod = Integer.parseInt(codComp.substring(2));
                 }
             }
 
@@ -166,30 +158,21 @@ public class Computador {
                 codComp = '0' + codComp;
             }
 
-            codComp = marca.substring(0, 2).toUpperCase() + codComp;
+           codComp = marcaAux.substring(0, 2).toUpperCase() + codComp;
            
 
         } catch (IOException e) {
             System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
             System.exit(0);
         }
-    }
-
-
-    // ***********************   Registrar   *****************************
-    public void Registrar() {
-        String compChave;
-        char confirmacao;
-        String continua;
-
-        do {
+        
 
             ativo = 'S';
+            marca = marcaAux;
+            quantVendida = 0;
+            dtUltimaVenda = "";
 
-            System.out.print("Digite a marca do Computador.........................: ");
-            marca = leia.nextLine();
-
-            System.out.print("Digite o modelo do comoutador.......: ");
+            System.out.print("Digite o modelo do computador.......: ");
             modelo = leia.nextLine();
 
             System.out.print("Digite o tipo do processador..................: ");
@@ -204,7 +187,7 @@ public class Computador {
             System.out.print("Digite a quantidade de estoque:  ");
             quantEstoque = leia.nextInt();
 
-            System.out.print("Digite o preco do computador: ");
+            System.out.print("Digite o preço do computador: ");
             preco = leia.nextFloat();
 
             do {
@@ -214,11 +197,10 @@ public class Computador {
                     salvarComputador();
                 }
             }while (confirmacao != 'S' && confirmacao != 'N');
-
-            System.out.println("Adicionar novo computador? [S]");
-            continua = leia.nextLine();
-
-        }while (continua.equalsIgnoreCase("s"));
+            
+            leia.nextLine();
+            
+        }while (! codComp.equalsIgnoreCase("FIM"));
     }
 
 
@@ -498,4 +480,3 @@ public class Computador {
         }
         return texto;
     }
-}
