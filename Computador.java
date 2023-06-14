@@ -371,8 +371,11 @@ public class Computador {
         RandomAccessFile arqComp;
         byte opcao;
         String compChave;
-        char sexoAux;
+        char pesqAux;
         long posicaoRegistro;
+        String data;
+        float minimo;
+        float maximo;
 
         do {
             do {
@@ -397,11 +400,19 @@ public class Computador {
                     break;
 
                 case 1:  // LISTAR TODOS OS COMPUTADORES
-                    Main.leia.nextLine();  // limpa buffer de memoria
-                    System.out.print("Digite a Matriocula do Aluno: ");
-                    compChave = Main.leia.nextLine();
+                    imprimirCabecalho();
+                    imprimirRelatorio();
 
+                    break;
+
+                case 2:  // imprime todos os computadores atraves do registro
+                	
+                	Main.leia.nextLine();  // limpa buffer de memoria
+                    System.out.print("Digite o codigo do computador: ");
+                    compChave = Main.leia.nextLine();
+                    
                     posicaoRegistro = pesquisarComputador(compChave);
+                    
                     if (posicaoRegistro == -1) {
                         System.out.println("Matricula nao cadastrada no arquivo \n");
                     } else {
@@ -410,68 +421,46 @@ public class Computador {
                         System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
                         Main.leia.nextLine();
                     }
-
                     break;
 
-                case 2:  // imprime todos os computadores atraves do registro
-                    try {
-                        arqComp = new RandomAccessFile("COMP.DAT" , "rw");
-                        imprimirCabecalho();
-                        while (true) {
-                            ativo		= arqComp.readChar();
-                            matricula   = arqComp.readUTF();
-                            nomeAluno   = arqComp.readUTF();
-                            dtNasc      = arqComp.readUTF();
-                            mensalidade = arqComp.readFloat();
-                            sexo        = arqComp.readChar();
-                            if ( ativo == 'S') {
-                                imprimirRelatorio();
-                            }
-                        }
-                        //    arqComp.close();
-                    } catch (EOFException e) {
-                        System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
-                        Main.leia.nextLine();
-                        compChave = Main.leia.nextLine();
-                    } catch (IOException e) {
-                        System.out.println("Erro na abertura do arquivo - programa sera finalizado");
-                        System.exit(0);
-                    }
-                    break;
-
-                case 3:  // imprime alunos do sexo desejado
-                    do {
-                        System.out.print("Digite o Sexo desejado (M/F): ");
-                        sexoAux = Main.leia.next().charAt(0);
-                        if (sexoAux != 'F' && sexoAux != 'M') {
-                            System.out.println("Sexo Invalido, digite M ou F");
-                        }
-                    }while (sexoAux != 'F' && sexoAux != 'M');
-
-                    try {
-                        arqComp = new RandomAccessFile("COMP.DAT", "rw");
-                        imprimirCabecalho();
-                        while (true) {
-                            ativo		= arqComp.readChar();
-                            matricula   = arqComp.readUTF();
-                            nomeAluno   = arqComp.readUTF();
-                            dtNasc      = arqComp.readUTF();
-                            mensalidade = arqComp.readFloat();
-                            sexo        = arqComp.readChar();
-
-                            if ( sexoAux == sexo && ativo == 'S') {
-                                imprimirRelatorio();
-                            }
-                        }
-                    } catch (EOFException e) {
-                        System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
-                        Main.leia.nextLine();
-                        compChave = Main.leia.nextLine();
-                    } catch (IOException e) {
-                        System.out.println("Erro na abertura do arquivo - programa sera finalizado");
-                        System.exit(0);
-                    }
-
+                case 3:
+                	 posicaoRegistro = pesquisarComputador(compChave);
+                	if(ativo == 'S' && quantVendida > 0) {
+                		imprimirCabecalho();
+                		imprimirRelatorio();
+                	}
+                	else {
+                		System.out.println("Nenhum computador nao foi vendido");
+                	}
+                	break;
+                	
+                case 4:
+                	System.out.println("Insira o mes e o ano(MM/AA): "); // 12/09/22
+                	data = leia.next();
+                	
+                	posicaoRegistro = pesquisarComputador(compChave);
+                	
+                	if(ativo == 'S' && data.equalsIgnoreCase(dtUltimaVenda.substring(3))){
+                		imprimirCabecalho();
+                		imprimirRelatorio();
+                	}
+                	
+                case 5:
+                	System.out.println("Digite uma faixa de preço mínima: ");
+                	minimo = leia.nextFloat();
+                	
+                	System.out.println("Digite uma faixa de preço máximo: ");
+                	maximo = leia.nextFloat();
+                	
+                	posicaoRegistro = pesquisarComputador(compChave);
+                	
+                	if(ativo == 'S' && preco >= minimo && preco <= maximo) {
+                		imprimirCabecalho();
+                		imprimirRelatorio();
+                	}
+                	
+                	break;
+                  
             }
 
         } while ( opcao != 0 );
@@ -491,12 +480,11 @@ public class Computador {
                 formatarString( String.valueOf(preco) , 10 ) + "  " +
                 formatarString( String.valueOf(quantVendida) , 10 ) + "  " +
                 formatarString( String.valueOf (dtUltimaVenda) , 10 ) + "  " +
-                formatarString( String.valueOf(preco * quantVendida) , 10 ) + "  " +
-                formatarString( Character.toString(ativo) , 6 )   );
+                formatarString( String.valueOf(preco * quantVendida) , 10 ) + "  ");
     }
 
     public void imprimirSomatorio() {
-
+    	
     }
 
     public static String formatarString (String texto, int tamanho) {
