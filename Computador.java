@@ -166,8 +166,8 @@ public class Computador {
                 codComp = '0' + codComp;
             }
 
-            marcaAux = marca.substring(0, 2);
-            codComp = marcaAux + codComp;
+            codComp = marca.substring(0, 2).toUpperCase() + codComp;
+           
 
         } catch (IOException e) {
             System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
