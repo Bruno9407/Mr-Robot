@@ -11,7 +11,7 @@ public class Main {
     			System.out.println("\n ***************  CADASTRO E VENDA DE COMPUTADORES  ***************** ");
     			System.out.println(" [1] INCLUIR COMPUTADOR ");
     			System.out.println(" [2] ALTERAR COMPUTADOR ");
-    			System.out.println(" [3] CONSULTAR RELATÓRIOS ");
+    			System.out.println(" [3] CONSULTAR RELATï¿½RIOS ");
     			System.out.println(" [4] EXCLUIR COMPUTADOR ");
     			System.out.println(" [5] REGISTRAR VENDAS ");
     			System.out.println(" [0] SAIR");
