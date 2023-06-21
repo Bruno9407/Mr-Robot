@@ -11,13 +11,13 @@ public class Main {
     			System.out.println("\n ***************  CADASTRO E VENDA DE COMPUTADORES  ***************** ");
     			System.out.println(" [1] INCLUIR COMPUTADOR ");
     			System.out.println(" [2] ALTERAR COMPUTADOR ");
-    			System.out.println(" [3] CONSULTAR RELATÓRIOS ");
+    			System.out.println(" [3] CONSULTAR RELATï¿½RIOS ");
     			System.out.println(" [4] EXCLUIR COMPUTADOR ");
     			System.out.println(" [5] REGISTRAR VENDAS ");
     			System.out.println(" [0] SAIR");
     			System.out.print("\nDigite a opcao desejada: ");
     			opcao = leia.nextByte();
-    			if (opcao < 0 || opcao > 4) {
+    			if (opcao < 0 || opcao > 5) {
     				System.out.println("opcao Invalida, digite novamente.\n");
     			}
     		}while (opcao < 0 || opcao > 5);
@@ -39,11 +39,11 @@ public class Main {
 					computador.excluir();
 					break;
 				case 5: 
-					// computador.registrarVenda();
+					computador.registrarVenda();
 					break;
 			}
     	} while ( opcao != 0 );
-    	//leia.close();
+    	leia.close();
 	}
 
 }
