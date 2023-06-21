@@ -1,391 +1,697 @@
 import java.io.*;
+import java.util.*;
 
 public class Computador {
 
-	char 	ativo;
-	String	marca;
-	String 	codComp;
-	String 	modelo;
-	String 	processador;
-	int quantMemoria;
-	int tamanhoTela;
-	int quantEstoque;
-	float preco;
-	int quantVendida;
-	String dtUltimaVenda; // <-- Data da �ltima Venda
-	Scanner leia = new Scanner(System.in);
+    String marcasComp[] = {"Dell", "Lenovo", "HP", "Positivo", "Asus", "Apple", "IBM"};
+    String processadoresComp[] = {"Intel Core i3", "Intel Core i5", "Intel Core i7", "Intel Core i9", "AMD Ryzen" , "AMD Athlon"};
+    int tamanhoTelas[] = {10, 12, 15, 20, 25, 28};
 
-	public long pesquisarComputador (String codCompPesq) {	
-		// metodo para localizar um registro no arquivo em disco
-		long posicaoCursorArquivo = 0;
-		try { 
-			RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
-			while (true) {
-				posicaoCursorArquivo  = arqComp.getFilePointer();	// posicao do inicio do registro no arquivo
-				ativo		  = arqComp.readChar();
-				marca  		  = arqComp.readUTF();
-				codComp		  = arqComp.readUTF();
-				modelo        = arqComp.readUTF();
-				processador   = arqComp.readUTF();
-				quantMemoria  = arqComp.readInt();
-				tamanhoTela   = arqComp.readInt();
-				quantEstoque  = arqComp.readInt();
-				preco		  = arqComp.readFloat();
-				quantVendida  = arqComp.readInt();
-				dtUltimaVenda = arqComp.readUTF();
-				
+    char 	ativo;
+    String	marca;
+    String 	codComp;
+    String 	modelo;
+    String 	processador;
+    String marcaAux;
+    int quantMemoria;
+    int tamanhoTela;
+    int quantEstoque;
+    float preco;
+    int quantVendida;
+    String dtUltimaVenda; // <-- DATA DA ULTIMA VENDA
 
-				if ( codCompPesq.equals(codComp) && ativo == 'S') {
-					arqComp.close();
-					return posicaoCursorArquivo;
-				}
-			}
-		}catch (EOFException e) {
-			return -1; // registro nao foi encontrado
-		}catch (IOException e) { 
-			System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
-			System.exit(0);
-			return -1;
-		}
-	}
+    Scanner leia = new Scanner(System.in);
 
-	public void salvarComputador() {	
-		// metodo para incluir um novo registro no final do arquivo em disco
-		try {
-			RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");	
-			arqComp.seek(arqComp.length());  // posiciona o ponteiro no final do arquivo (EOF)
-			arqComp.writeChar(ativo);
-			arqComp.writeUTF(marca);
-			arqComp.writeUTF(codComp);
-			arqComp.writeUTF(modelo);
-			arqComp.writeUTF(processador);
-			arqComp.writeInt(quantMemoria);
-			arqComp.writeInt(tamanhoTela);
-			arqComp.writeInt(quantEstoque);
-			arqComp.writeFloat(preco);
-			arqComp.writeInt(quantVendida);
-			arqComp.writeUTF(dtUltimaVenda);
-			arqComp.close();
-			
-			System.out.println("Dados gravados com sucesso !\n");
-		}catch (IOException e) { 
-			System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
-			System.exit(0);
-		}
-	}
-
-	public void desativarComputador(long posicao)	{    
-		// metodo para alterar o valor do campo ATIVO para N, tornando assim o registro excluido
-		try {
-			RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");			
-			arqComp.seek(posicao);
-			arqComp.writeChar('N');   // desativar o registro antigo
-			arqComp.close();
-		}catch (IOException e) { 
-			System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
-			System.exit(0);
-		}
-	}
-
-	// ***********************   INCLUSAO   *****************************
-	public void incluir() {
-		String CompChave;
-		char confirmacao;
-		long posicaoRegistro;
-
-		do {
-			do {
-				leia.nextLine();
-				System.out.println("\n ***************  INCLUSAO DE ALUNOS  ***************** ");
-				System.out.print("Digite a chave do Computador( FIM para encerrar): ");
-				CompChave = leia.nextLine();
-				if (CompChave.equals("FIM")) {
-					break;
-				}
-				posicaoRegistro = pesquisarComputador(CompChave);
-
-				if (posicaoRegistro >= 0) {
-					System.out.println("Matricula ja cadastrada, digite outro valor\n");
-				}
-			}while (posicaoRegistro >= 0);
-
-			if (CompChave.equals("FIM")) {
-				break;
-			}
-
-			ativo = 'S';
-			matricula = matriculaChave;
-			System.out.print("Digite o nome do aluno.........................: ");
-			nomeAluno = Main.leia.nextLine();
-			System.out.print("Digite a data de nascimento (DD/MM/AAAA).......: ");
-			dtNasc = Main.leia.nextLine();	    	
-			System.out.print("Digite o valor da mensalidade..................: ");
-			mensalidade = Main.leia.nextFloat();
-			System.out.print("Digite o Sexo do aluno (M/F)...................: ");
-			sexo = Main.leia.next().charAt(0);
-
-			do {
-				System.out.print("\nConfirma a gravacao dos dados (S/N) ? ");
-				confirmacao = Main.leia.next().charAt(0);
-				if (confirmacao == 'S') {
-					salvarAluno();
-				}
-			}while (confirmacao != 'S' && confirmacao != 'N');
-
-		}while ( ! matricula.equals("FIM"));	    
-	}
+    public long pesquisarComputador (String codCompPesq) {
+    	// METODO PARA LOCALIZAR UM REGISTRO NO ARQUIVO EM DISCO
+        long posicaoCursorArquivo = 0;
+        try {
+            RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
+            while (true) {
+                posicaoCursorArquivo  = arqComp.getFilePointer();	// POSICAO NO INICIO DO ARQUIVO DE REGISTRO
+                ativo		  = arqComp.readChar();
+                marca  		  = arqComp.readUTF();
+                codComp		  = arqComp.readUTF();
+                modelo        = arqComp.readUTF();
+                processador   = arqComp.readUTF();
+                quantMemoria  = arqComp.readInt();
+                tamanhoTela   = arqComp.readInt();
+                quantEstoque  = arqComp.readInt();
+                preco		  = arqComp.readFloat();
+                quantVendida  = arqComp.readInt();
+                dtUltimaVenda = arqComp.readUTF();
 
 
-	//************************  ALTERACAO  *****************************
-	public void alterar() {
-		String matriculaChave;
-		char confirmacao;
-		long posicaoRegistro = 0;
-		byte opcao;
+                if ( codCompPesq.equals(codComp) && ativo == 'S') {
+                    arqComp.close();
+                    return posicaoCursorArquivo;
+                }
+            }
+        }catch (EOFException e) {
+            return -1; // REGISTRO NÃO FOI ENCONTRADO
+        }catch (IOException e) {
+            System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
+            System.exit(0);
+            return -1;
+        }
+    }
 
-		do {
-			do {
-				Main.leia.nextLine();
-				System.out.println("\n ***************  ALTERACAO DE ALUNOS  ***************** ");
-				System.out.print("Digite a Matricula do Aluno que deseja alterar( FIM para encerrar ): ");
-				matriculaChave = Main.leia.nextLine();
-				if (matriculaChave.equals("FIM")) {
-					break;
-				}
+    public void listarComputadores() {
+    	
+    	try {
+    		RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
+    		
+    		while(true) {
+    			
+    			ativo		  = arqComp.readChar();
+                marca  		  = arqComp.readUTF();
+                codComp		  = arqComp.readUTF();
+                modelo        = arqComp.readUTF();
+                processador   = arqComp.readUTF();
+                quantMemoria  = arqComp.readInt();
+                tamanhoTela   = arqComp.readInt();
+                quantEstoque  = arqComp.readInt();
+                preco		  = arqComp.readFloat();
+                quantVendida  = arqComp.readInt();
+                dtUltimaVenda = arqComp.readUTF();
+                
+                imprimirRelatorio();
+                
+    		}    		    	
+    		
+    	}catch (EOFException e) {
+    		System.out.println("***************** FIM DO RELATORIO ******************");
+    	}catch (IOException e) {
+    		System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
+            System.exit(0);
+    	}
+    }
+    
+    public void listarVendidos() {
 
-				posicaoRegistro = pesquisarAluno(matriculaChave);
-				if (posicaoRegistro == -1) {
-					System.out.println("Matricula nao cadastrada no arquivo, digite outro valor\n");
-				}
-			}while (posicaoRegistro == -1);
+    	try {
+    		RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
+    		
+    		while(true) {
+    			
+    			ativo		  = arqComp.readChar();
+                marca  		  = arqComp.readUTF();
+                codComp		  = arqComp.readUTF();
+                modelo        = arqComp.readUTF();
+                processador   = arqComp.readUTF();
+                quantMemoria  = arqComp.readInt();
+                tamanhoTela   = arqComp.readInt();
+                quantEstoque  = arqComp.readInt();
+                preco		  = arqComp.readFloat();
+                quantVendida  = arqComp.readInt();
+                dtUltimaVenda = arqComp.readUTF();
+                
+                if (ativo == 'S' && quantVendida > 0) {
+                	imprimirRelatorio();
+                }                
+    		}
+    		
+    	}catch (EOFException e) {
+    		System.out.println("***************** FIM DO RELATORIO ******************");
+    	}catch (IOException e) {
+    		System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
+            System.exit(0);
+    	}
+    }
+    
+    public void ListarPorData(String data) {
+    	
+    	try {
+    		RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
+    		
+    		while(true) {
+    			
+    			ativo		  = arqComp.readChar();
+                marca  		  = arqComp.readUTF();
+                codComp		  = arqComp.readUTF();
+                modelo        = arqComp.readUTF();
+                processador   = arqComp.readUTF();
+                quantMemoria  = arqComp.readInt();
+                tamanhoTela   = arqComp.readInt();
+                quantEstoque  = arqComp.readInt();
+                preco		  = arqComp.readFloat();
+                quantVendida  = arqComp.readInt();
+                dtUltimaVenda = arqComp.readUTF();
+                
+                if (ativo == 'S' && data.equals(dtUltimaVenda.substring(3))) {
+                	imprimirRelatorio();
+                }                
+    		}
+    		
+    	}catch (EOFException e) {
+    		System.out.println(" ");
+    	}catch (IOException e) {
+    		System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
+            System.exit(0);
+    	}
+    }
+    
+    public void listarPorValor(float minimo, float maximo){
+    	
+    	try {
+    		RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
+    		
+    		while(true) {
+    			
+    			ativo		  = arqComp.readChar();
+                marca  		  = arqComp.readUTF();
+                codComp		  = arqComp.readUTF();
+                modelo        = arqComp.readUTF();
+                processador   = arqComp.readUTF();
+                quantMemoria  = arqComp.readInt();
+                tamanhoTela   = arqComp.readInt();
+                quantEstoque  = arqComp.readInt();
+                preco		  = arqComp.readFloat();
+                quantVendida  = arqComp.readInt();
+                dtUltimaVenda = arqComp.readUTF();
+                
+                if(ativo == 'S' && preco >= minimo && preco <= maximo) {
+            		imprimirRelatorio();
+            	}               
+    		}
+    		
+    	}catch (EOFException e) {    
+    		System.out.println(" ");
+    	}catch (IOException e) {
+    		System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
+            System.exit(0);
+    	}
+    }
+    
+    public boolean checarProcessadores() {
 
-			if (matriculaChave.equals("FIM")) {
-				break;
-			}
+        for(int x = 0; x < processadoresComp.length; x++) {
+            if(processador.equalsIgnoreCase(processadoresComp[x])) {
+                return true;
+            }
+        }
+        System.out.println("Processador invalido! digite outro: ");
+        return false;
+    }
 
-			ativo = 'S';
+    public boolean checarTelas() {
 
-			do {
-				System.out.println("[ 1 ] Nome do Aluno............: " + nomeAluno);
-				System.out.println("[ 2 ] Data de nascimento ......: " + dtNasc);
-				System.out.println("[ 3 ] Valor da mensalidade.....: " + mensalidade);
-				System.out.println("[ 4 ] sexo do Aluno............: " + sexo);
+        for(int x = 0; x < tamanhoTelas.length; x++) {
+            if(tamanhoTela == tamanhoTelas[x]) {
+                return true;
+            }
+        }
+        System.out.println("Tela invalida! digite outra: ");
+        return false;
+    }
+    
+    public boolean checarMarcas() {
+    	for(int x = 0; x < marcasComp.length; x++) {
+            if(marcaAux.equalsIgnoreCase(marcasComp[x])) {
+                return true;
+            }
+        }
+    	System.out.println("Marca invalida! digite outra: ");
+    	return false;
+    }
+    
 
-				do{
-					System.out.println("Digite o numero do campo que deseja alterar (0 para finalizar as alterações): ");
-					opcao = Main.leia.nextByte();
-				}while (opcao < 0 || opcao > 4);
+    public void salvarComputador() {
+    	// METODO PARA INCLUIR UM NOVO REGISTRO NO FINAL DO ARQUIVO EM DISCO
+        try {
+            RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
+            arqComp.seek(arqComp.length());  // POSICIONA O PONTEIRO NO FINAL DO ARQUIVO (EOF)
+            arqComp.writeChar(ativo);
+            arqComp.writeUTF(marca);
+            arqComp.writeUTF(codComp);
+            arqComp.writeUTF(modelo);
+            arqComp.writeUTF(processador);
+            arqComp.writeInt(quantMemoria);
+            arqComp.writeInt(tamanhoTela);
+            arqComp.writeInt(quantEstoque);
+            arqComp.writeFloat(preco);
+            arqComp.writeInt(quantVendida);
+            arqComp.writeUTF(dtUltimaVenda);
+            arqComp.close();
 
-				switch (opcao) {
-				case 1:
-					Main.leia.nextLine();
-					System.out.print  ("Digite o NOVO NOME do Aluno..................: ");
-					nomeAluno = Main.leia.nextLine();
-					break;
-				case 2: 
-					Main.leia.nextLine();
-					System.out.print  ("Digite a NOVA DATA de Nascimento (DD/MM/AAAA): ");
-					dtNasc = Main.leia.nextLine();
-					break;
-				case 3:
-					System.out.print  ("Digite o NOVO VALOR da mensalidade...........: ");
-					mensalidade = Main.leia.nextFloat();
-					break;
-				case 4: 
-					System.out.print  ("Digite o NOVO sexo do Aluno (M/F)............: ");
-					sexo = Main.leia.next().charAt(0);
-					break;
-				}
-				System.out.println();
-			}while (opcao != 0);  		
+            System.out.println("Dados gravados com sucesso !\n");
+        }catch (IOException e) {
+            System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
+            System.exit(0);
+        }
+    }
 
-			do {
-				System.out.print("\nConfirma a alteracao dos dados (S/N) ? ");
-				confirmacao = Main.leia.next().charAt(0);
-				if (confirmacao == 'S') {
-					desativarAluno(posicaoRegistro);
-					salvarAluno();
-					System.out.println("Dados gravados com sucesso !\n");
-				}
-			}while (confirmacao != 'S' && confirmacao != 'N');
+    public void desativarComputador(long posicao)	{
+    	// METODO PARA ALTERAR O VALOR DO CAMPO "ATIVO" PARA 'N', TORNANDO-O ASSIM O REGISTRO "EXCLUIDO" 
+        try {
+            RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
+            arqComp.seek(posicao);
+            arqComp.writeChar('N');   // DESATIVAR O REGISTRO ANTIGO
+            arqComp.close();
+        }catch (IOException e) {
+            System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
+            System.exit(0);
+        }
+    }
 
-		}while ( ! matricula.equals("FIM"));
-	}
+    // ***********************   INCLUIR     *****************************
+
+    public void incluir() {
+
+        char confirmacao;
+        int maiorCod;
+
+       do{
+    	    maiorCod = 0;
+	        System.out.println("Digite a marca que deseja incluir estoque(FIM PARA ENCERRAR A INCLUSÃO): ");
+	        marcaAux = leia.nextLine();
+	        
+	        if (marcaAux.equalsIgnoreCase("FIM")) {
+	        	break;
+	        }
+	                	
+	        while(! checarMarcas()) {  
+	        	marcaAux = leia.nextLine();
+	        }
+	
+	        try {
+	            RandomAccessFile arqComp = new RandomAccessFile("COMP.DAT", "rw");
+	
+	            while (true) {
+	                ativo = arqComp.readChar();
+	                marca = arqComp.readUTF();
+	                codComp = arqComp.readUTF();
+	                modelo  = arqComp.readUTF();
+	                processador = arqComp.readUTF();
+	                quantMemoria = arqComp.readInt();
+	                tamanhoTela = arqComp.readInt();
+	                quantEstoque = arqComp.readInt();
+	                preco = arqComp.readFloat();
+	                quantVendida = arqComp.readInt();
+	                dtUltimaVenda = arqComp.readUTF();
+	
+	                if ( marca.equals(marcaAux) && Integer.parseInt(codComp.substring(2)) > maiorCod && ativo == 'S') {
+	                    maiorCod = Integer.parseInt(codComp.substring(2));
+	                }
+	            }
+	            
+	        }catch (EOFException e) {
+	            maiorCod = maiorCod + 1;
+	            codComp = String.valueOf(maiorCod);
+	            while(codComp.length() < 4 ){
+	                codComp = '0' + codComp;
+	            }
+	
+	           codComp = marcaAux.substring(0, 2).toUpperCase() + codComp;
+	
+	        } catch (IOException e) {
+	            System.out.println("Erro na abertura do arquivo  -  programa sera finalizado");
+	            System.exit(0);
+	        }
+        
+
+            ativo = 'S';
+            marca = marcaAux;
+            quantVendida = 0;
+            dtUltimaVenda = "";
+
+            do {
+            	System.out.print("Digite o modelo do computador.......: ");
+                modelo = leia.nextLine();	
+            } while(modelo.equals(""));
+            
+            do {
+            	System.out.print("Digite o tipo do processador..................: ");
+                processador = leia.nextLine();	
+            } while(! checarProcessadores());
+            
+            System.out.print("Digite a quantida de memoria RAM...................: ");
+            quantMemoria = leia.nextInt();	
+            
+            while(quantMemoria < 1 || quantMemoria > 16){
+            	System.out.println("Quantidade de memoria RAM deve estar entre 1GB e 16GB!");
+            	System.out.print("Digite a quantida de memoria RAM...................: ");
+            	quantMemoria = leia.nextInt();
+            }   	
+            
+            do {
+            	System.out.print("Digite o tamanho da tela: ");
+                tamanhoTela = leia.nextInt();	
+            } while(! checarTelas());
+            
+            System.out.print("Digite a quantidade de estoque:  ");
+            quantEstoque = leia.nextInt();	            
+            	
+            while (quantEstoque < 0){
+            	System.out.println("Estoque deve ser maior ou igual a 0:  ");
+            	System.out.print("Digite a quantidade de estoque:  ");
+            	quantEstoque = leia.nextInt();	
+            }
+            
+            System.out.print("Digite o preço do computador: ");
+            preco = leia.nextFloat();	
+            
+       
+            while(preco < 1000 || preco > 20000) {
+            	System.out.println("O valor deve estar entre R$1000 e R$20000!");
+            	System.out.print("Digite o preço do computador: ");
+                preco = leia.nextFloat();	
+            }
+            
+            do {
+                System.out.print("\nConfirma a gravacao dos dados (S/N) ? ");
+                confirmacao = leia.next().charAt(0);
+                if (confirmacao == 'S') {
+                    salvarComputador();
+                }
+            }while (confirmacao != 'S' && confirmacao != 'N');
+                        
+            do {
+            	System.out.println("Deseja adicionar outro computador? [S/N]");
+            	confirmacao = leia.next().charAt(0);
+            }while(confirmacao != 'S' && confirmacao != 'N');
+            
+            
+        }while (! (confirmacao == 'N'));
+    }
 
 
-	//************************  EXCLUSAO  *****************************
-	public void excluir() {
-		String matriculaChave;
-		char confirmacao;
-		long posicaoRegistro = 0;
+    //************************  ALTERACAO  *****************************
+    public void alterar() {
+        String codComp;
+        char confirmacao;
+        long posicaoRegistro = 0;
+        byte opcao;
 
-		do {
-			do {
-				Main.leia.nextLine();
-				System.out.println(" ***************  EXCLUSAO DE ALUNOS  ***************** ");
-				System.out.print("Digite a Matricula do Aluno que deseja excluir ( FIM para encerrar ): ");
-				matriculaChave = Main.leia.nextLine();
-				if (matriculaChave.equals("FIM")) {
-					break;
-				}
+        do {
+        	leia.nextLine();
+            do {
+                System.out.println("\n ***************  ALTERACAO DE ALUNOS  ***************** ");
+                System.out.print("Digite o computador que deseja alterar( FIM para encerrar ): ");
+                codComp = leia.nextLine();
+                if (codComp.equals("FIM")) {
+                    break;
+                }
 
-				posicaoRegistro = pesquisarAluno(matriculaChave);
-				if (posicaoRegistro == -1) {
-					System.out.println("Matricula nao cadastrada no arquivo, digite outro valor\n");
-				}
-			}while (posicaoRegistro == -1);
+                posicaoRegistro = pesquisarComputador(codComp);
+                if (posicaoRegistro == -1) {
+                    System.out.println("Matricula nao cadastrada no arquivo, digite outro valor\n");
+                }
+            }while (posicaoRegistro == -1);
 
-			if (matriculaChave.equals("FIM")) {
-				System.out.println("\n ************  PROGRAMA ENCERRADO  ************** \n");
-				break;
-			}
+            if (codComp.equalsIgnoreCase("FIM")) {
+                break;
+            }
 
-			System.out.println("Nome do aluno.......: " + nomeAluno);
-			System.out.println("Data de nascimento..: " + dtNasc);
-			System.out.println("Valor da mensalidade: " + mensalidade);
-			System.out.println("Sexo do aluno.......: " + sexo);
-			System.out.println();
+            ativo = 'S';
 
-			do {
-				System.out.print("\nConfirma a exclusao deste aluno (S/N) ? ");
-				confirmacao = Main.leia.next().charAt(0);
-				if (confirmacao == 'S') {
-					desativarAluno(posicaoRegistro);
-				}
-			}while (confirmacao != 'S' && confirmacao != 'N');
+            do {
+                System.out.println("[ 1 ] Modelo do computador ......: " + modelo);
+                System.out.println("[ 2 ] Processador.....: " + processador);
+                System.out.println("[ 3 ] Quantidade de memoria RAM ............: " + quantMemoria);
+                System.out.println("[ 4 ] Tamanho da tela.....: " + tamanhoTela);
+                System.out.println("[ 5 ] Quantidade de estoque.....: " + tamanhoTela);
+                System.out.println("[ 6 ] preco.....: " + preco);
 
-		}while ( ! matricula.equals("FIM"));
-	}
+                do{
+                    System.out.println("Digite o numero do campo que deseja alterar (0 para finalizar as alteraÃ§Ãµes): ");
+                    opcao = leia.nextByte();
+                }while (opcao < 0 || opcao > 6);
 
-	//************************  CONSULTA  *****************************
-	public void consultar() 	{
-		RandomAccessFile arqComp;
-		byte opcao;
-		String matriculaChave;
-		char sexoAux;
-		long posicaoRegistro;
+                switch (opcao) {
+                    case 1:
+                        leia.nextLine();
+                        System.out.println("Digite o modelo de computador: ");
+                        modelo = leia.nextLine();
 
-		do {
-			do {
-				System.out.println(" ***************  CONSULTA DE ALUNOS  ***************** ");
-				System.out.println(" [1] CONSULTAR APENAS 1 ALUNO ");
-				System.out.println(" [2] LISTA DE TODOS OS ALUNOS ");
-				System.out.println(" [3] LISTA SOMENTE SEXO MASCULINO OU FEMININO ");
-				System.out.println(" [0] SAIR");
-				System.out.print("\nDigite a opcao desejada: ");
-				opcao = Main.leia.nextByte();
-				if (opcao < 0 || opcao > 3) {
-					System.out.println("opcao Invalida, digite novamente.\n");
-				}
-			}while (opcao < 0 || opcao > 3);
+                        break;
 
-			switch (opcao) {
-			case 0:
-				System.out.println("\n ************  PROGRAMA ENCERRADO  ************** \n");
-				break;
+                    case 2:
+                        do {
+                            System.out.println("Digite o novo processador...........: ");
+                            processador = leia.nextLine();
+                            if(!checarProcessadores()) {
+                                System.out.println("Processador invalido");
+                            }
+                        }while(!checarProcessadores());
+                        break;
 
-			case 1:  // consulta de uma unica matricula
-				Main.leia.nextLine();  // limpa buffer de memoria
-				System.out.print("Digite a Matriocula do Aluno: ");
-				matriculaChave = Main.leia.nextLine();
+                    case 3:
+                        System.out.println("Digite a quantidade de memoria RAM");
+                        quantMemoria = leia.nextInt();
+                        break;
 
-				posicaoRegistro = pesquisarAluno(matriculaChave);
-				if (posicaoRegistro == -1) {
-					System.out.println("Matricula nao cadastrada no arquivo \n");
-				} else {
-					imprimirCabecalho();
-					imprimirAluno();
-					System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
-					Main.leia.nextLine();
-				}
+                    case 4:
+                        do {
+                            System.out.println("Digite o tamanho da tela: ");
+                            tamanhoTela = leia.nextInt();
+                            if(! checarTelas()) {
+                                System.out.println("Telas invalidas");
+                            }
+                        }while(! checarTelas());
 
-				break;
+                        break;
 
-			case 2:  // imprime todos os alunos
-				try { 
-					arqComp = new RandomAccessFile("COMP.DAT" , "rw");
-					imprimirCabecalho();
-					while (true) {
-						ativo		= arqComp.readChar();
-						matricula   = arqComp.readUTF();
-						nomeAluno   = arqComp.readUTF();
-						dtNasc      = arqComp.readUTF();
-						mensalidade = arqComp.readFloat();
-						sexo        = arqComp.readChar();
-						if ( ativo == 'S') {
-							imprimirAluno();
-						}
-					}
-					//    arqComp.close();
-				} catch (EOFException e) {
-					System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
-					Main.leia.nextLine();
-					matriculaChave = Main.leia.nextLine();
-				} catch (IOException e) { 
-					System.out.println("Erro na abertura do arquivo - programa sera finalizado");
-					System.exit(0);
-				}
-				break;
+                    case 5:
+                        System.out.println("Digite a quantidade de estoque: ");
+                        quantEstoque = leia.nextInt();
+                        break;
 
-			case 3:  // imprime alunos do sexo desejado
-				do {
-					System.out.print("Digite o Sexo desejado (M/F): ");
-					sexoAux = Main.leia.next().charAt(0);
-					if (sexoAux != 'F' && sexoAux != 'M') {
-						System.out.println("Sexo Invalido, digite M ou F");
-					}
-				}while (sexoAux != 'F' && sexoAux != 'M');
+                    case 6:
+                        System.out.println("Digite o preco: ");
+                        preco = leia.nextFloat();
+                        break;
 
-				try { 
-					arqComp = new RandomAccessFile("COMP.DAT", "rw");
-					imprimirCabecalho();
-					while (true) {
-						ativo		= arqComp.readChar();
-						matricula   = arqComp.readUTF();
-						nomeAluno   = arqComp.readUTF();
-						dtNasc      = arqComp.readUTF();
-						mensalidade = arqComp.readFloat();
-						sexo        = arqComp.readChar();
+                }
+                System.out.println();
+            }while (opcao != 0);
 
-						if ( sexoAux == sexo && ativo == 'S') {
-							imprimirAluno();
-						}
-					}
-				} catch (EOFException e) {
-					System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
-					Main.leia.nextLine();
-					matriculaChave = Main.leia.nextLine();
-				} catch (IOException e) { 
-					System.out.println("Erro na abertura do arquivo - programa sera finalizado");
-					System.exit(0);
-				}
+            do {
+                System.out.print("\nConfirma a alteracao dos dados (S/N) ? ");
+                confirmacao = leia.next().charAt(0);
+                if (confirmacao == 'S') {
+                    desativarComputador(posicaoRegistro);
+                    salvarComputador();
+                    System.out.println("Dados gravados com sucesso !\n");
+                }
+            }while (confirmacao != 'S' && confirmacao != 'N');
 
-			}	
+           
+        }while ( ! codComp.equals("FIM"));
+    }
 
-		} while ( opcao != 0 );
-	}
 
-	public void imprimirCabecalho () {
-		System.out.println("-MATRICULA-  -------- NOME ALUNO ----------  --DATA NASC--  -Mensalidade-  -sexo- ");
-	}
+    //************************  EXCLUSAO  *****************************
+    public void excluir() {
+        String compChave;
+        char confirmacao;
+        long posicaoRegistro = 0;
 
-	public void imprimirAluno () {
-		System.out.println(	formatarString(matricula, 11 ) + "  " +
-				formatarString(nomeAluno , 30) + "  " + 
-				formatarString(dtNasc , 13) + "  " + 
-				formatarString( String.valueOf(mensalidade) , 13 ) + "  " +
-				formatarString( Character.toString(sexo) , 6 )   ); 
-	}
+        do {
+            do {
+                leia.nextLine();
+                System.out.println(" ***************  EXCLUSAO DE COMPUTADORES  ***************** ");
+                System.out.print("Digite o codigo do computador que deseja excluir ( FIM para encerrar ): ");
+                compChave = leia.nextLine();
 
-	public static String formatarString (String texto, int tamanho) {	
-		// retorna uma string com o numero de caracteres passado como parametro em TAMANHO
-		if (texto.length() > tamanho) {
-			texto = texto.substring(0,tamanho);
-		}else{
-			while (texto.length() < tamanho) {
-				texto = texto + " ";
-			}
-		}
-		return texto;
-	}
+                if (compChave.equalsIgnoreCase("FIM")) {
+                    break;
+                }
+
+                posicaoRegistro = pesquisarComputador(compChave);
+
+                if (posicaoRegistro == -1) {
+                    System.out.println("Matricula nao cadastrada no arquivo, digite outro valor\n");
+                }
+            }while (posicaoRegistro == -1);
+
+            if (compChave.equals("FIM")) {
+                System.out.println("\n ************  PROGRAMA ENCERRADO  ************** \n");
+                break;
+            }
+
+            do {
+                System.out.print("\nConfirma a exclusao deste computador (S/N) ? ");
+                confirmacao = leia.next().charAt(0);
+            }while (confirmacao != 'S' && confirmacao != 'N');
+                if (confirmacao == 'S') {
+                    desativarComputador(posicaoRegistro);
+                }
+
+        }while ( ! compChave.equals("FIM"));
+    }
+
+    //************************  CONSULTA  *****************************
+    public void consultar() 	{
+        byte opcao;
+        String compChave;
+        long posicaoRegistro;
+        String data;
+        float minimo;
+        float maximo;
+
+        do {
+            do {
+                System.out.println(" ***************  CONSULTA DE COMPUTADORES  ***************** ");
+                System.out.println(" [1] LISTAR TODOS OS COMPUTADORES ");
+                System.out.println(" [2] LISTAR APENAS UM COMPUTADOR ATRAVÉS DO CODCAMP INFORMADO ");
+                System.out.println(" [3] LISTAR SOMENTE COMPUTADORES JÁ VENDIDOS ");
+                System.out.println(" [4] LISTAR COMPUTADORES CUJA ÚLTIMA VENDA OCORREU EM DETERMINADO MÊS/ANO ");
+                System.out.println(" [5] LISTAR COMPUTADORES POR FAIXA DE PREÇO ");
+                System.out.println(" [0] SAIR");
+
+                System.out.print("\nDigite a opcao desejada: ");
+                opcao = leia.nextByte();
+                if (opcao < 0 || opcao > 5) {
+                    System.out.println("opcao Invalida, digite novamente.\n");
+                }
+            }while (opcao < 0 || opcao > 5);
+
+            switch (opcao) {
+                case 0:
+                    System.out.println("\n ************  PROGRAMA ENCERRADO  ************** \n");
+                    break;
+
+                case 1:  // LISTAR TODOS OS COMPUTADORES
+                    imprimirCabecalho();
+                    listarComputadores();
+
+                    break;
+
+                case 2:  // IMPRIME TODOS COMPUTADORES ATRAVES DO REGISTRO
+                	
+                	leia.nextLine();  // LIMPA O BUFFER DE MEMORIA
+                    System.out.print("Digite o codigo do computador: ");
+                    compChave = leia.nextLine();
+                    
+                    posicaoRegistro = pesquisarComputador(compChave);
+                    
+                    if (posicaoRegistro == -1) {
+                        System.out.println("Matricula nao cadastrada no arquivo \n");
+                    } else {
+                        imprimirCabecalho();
+                        imprimirRelatorio();
+                        System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
+                        leia.nextLine();
+                    }
+                    
+                    break;
+
+                case 3: // LISTAR OS JÁ VENDIDOS
+                	 imprimirCabecalho();
+                	 listarVendidos();
+                	 System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
+                     leia.nextLine();
+                	break;
+                	
+                case 4: // LISTAR VENDIDOS EM DETERMINADA DATA
+                	System.out.println("Insira o mes e o ano(MM/AA): "); // 12/09/22
+                	data = leia.next();
+                	
+                	imprimirCabecalho();
+                	ListarPorData(data);
+                	System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
+                    leia.nextLine();
+                	break;
+                	
+                case 5: // LISTAR POR FAIXA DE PREÇO
+                	System.out.println("Digite uma faixa de preço mínima: ");
+                	minimo = leia.nextFloat();
+                	
+                	System.out.println("Digite uma faixa de preço máximo: ");
+                	maximo = leia.nextFloat();
+                                	
+                	imprimirCabecalho();                	
+                	listarPorValor(minimo, maximo);
+                	System.out.println("\n FIM DE RELATORIO - ENTER para continuar...\n");
+                    leia.nextLine();
+                	break;                  
+            }
+
+        } while ( opcao != 0 );
+    }
+    
+    public void registrarVenda () {
+    	
+    	long posicaoRegistro;
+    	String compChave;
+    	char opcao;
+    	do {
+	 
+	    	System.out.println(" ***************  REGISTRAR VENDA  ***************** ");
+	    	
+	    	System.out.println("Digite o codigo do computador: ['FIM' para sair]");
+	    	compChave = leia.nextLine();
+	    	if (compChave.equalsIgnoreCase("FIM")) {
+	    		break;
+	    	}
+	    	posicaoRegistro = pesquisarComputador(compChave);
+	    			
+	    	while(posicaoRegistro == -1){
+	    		System.out.println("Chave Invalida!");
+	    		System.out.println("Digite o codigo do computador: ");
+	        	compChave = leia.nextLine();
+	        	posicaoRegistro = pesquisarComputador(compChave);
+	    	} 
+	    	
+	    	System.out.println("Digite a quantidade vendida: ");
+	    	quantVendida += leia.nextInt();
+	    	
+	    	while(quantVendida > quantEstoque) {
+	    		System.out.println("Valor superior ao estoque!");
+	    		System.out.println("Digite a quantidade vendida: ");
+	        	quantVendida = leia.nextInt();
+	    	}
+	    	
+	    	quantEstoque -= quantVendida;
+	    	    
+	    	leia.nextLine();
+	    	
+	    	System.out.println("Data da venda: [DD/MM/AA]");
+	    	dtUltimaVenda = leia.nextLine();
+	    	
+	    	System.out.println("Registrar venda? [S/N]");
+	    	opcao = leia.nextLine().charAt(0);
+	    	
+	    	if(opcao == 'S') {
+	    		salvarComputador();
+	    		desativarComputador(posicaoRegistro);
+	    		System.out.println("Venda registrada!");
+	    	}
+	    	
+	    	System.out.println("Registrar outra venda? [S/N]");
+	    	opcao = leia.nextLine().charAt(0);
+	    	
+    	}while(opcao == 'S');
+    	
+    }
+
+    public void imprimirCabecalho () {
+        System.out.println("-CODCOMP-		-------- MARCA ----------		--MODELO--		-PROCESSADOR-		-ESTOQUE-		-PREÇO-		-QUANT.VEND-		-DT ULT VENDA-		-VLR TOTAL-");
+    }
+
+    public void imprimirRelatorio () {
+        System.out.println(
+                formatarString( codComp , 30 ) + "  " +
+                formatarString( marca , 30 ) + "  " +
+                formatarString( modelo , 30 ) + "  " +
+                formatarString( processador , 30 ) + "  " +
+                formatarString( String.valueOf(quantEstoque) , 10 ) + "  " +
+                formatarString( String.valueOf(preco) , 10 ) + "  " +
+                formatarString( String.valueOf(quantVendida) , 10 ) + "  " +
+                formatarString( String.valueOf (dtUltimaVenda) , 10 ) + "  " +
+                formatarString( String.valueOf(preco * quantVendida) , 10 ) + "  ");
+    }
+
+    public static String formatarString (String texto, int tamanho) {
+    	// RETORNA UMA STRING COM O NUMERO DE CARACTERES PASSADO COMO PARAMETRO EM TAMANHO 
+        if (texto.length() > tamanho) {
+            texto = texto.substring(0,tamanho);
+        }else{
+            while (texto.length() < tamanho) {
+                texto = texto + " ";
+            }
+        }
+        return texto;
+    }
 }
